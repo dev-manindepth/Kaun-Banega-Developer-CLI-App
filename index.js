@@ -10,28 +10,51 @@ function init() {
     `Heyy ! Welcome to ${chalk.bold.inverse("KAUN BANEGA DEVELOPER")} challenge`
   );
   if (readline.keyInYN("Do you want to play Game")) {
-    console.log(chalk.bgYellow("\n*********** Game Rule ****************"))
-    console.log(chalk.bgYellow("You get one lifeline chance to revive\n"))
+    console.log(
+      chalk.bgYellow(
+        `\n*********** Game Rule **************** \nThere is no penalty for wrong answer \nYou get one lifeline chance to revive\n`
+      )
+    );
+
     playGame(easyQuestions);
   } else {
     return;
   }
 }
+
+function scoreSummary(score, wrongAnswer) {
+  console.log(
+    chalk.bold(
+      `Your total Score is ${chalk.green(
+        score === 0 || 1 ? score : score - wrongAnswer
+      )} , Below 👇 is the score summary :- \nCorrect Answer: ${chalk.green(
+        score
+      )}\n Wrong Answer : ${chalk.red(wrongAnswer)}`
+    )
+  );
+}
+
 function playGame(questionType) {
   for (let i = 0; i < questionType.length; i++) {
     const { id, question, options, answer } = questionType[i];
     console.log(
-      chalk.bgBlack.bold.inverse(`Q[${id}]: What's the answer? \n ${question}`)
+      chalk.bold.inverse(`Q[${id}]: What's the answer? \n ${question}`)
     );
     const index = readline.keyInSelect(options, "Select options from ");
 
     if (index === -1) {
-      console.log(chalk.red(`BYE ,Hope you come back soon . Your total Score was ${score - wrongAnswer}`))
+      console.log(
+        chalk.red(
+          `BYE ,Hope you come back soon . Your total Score was ${
+            score - wrongAnswer
+          }`
+        )
+      );
       return;
     }
     if (options[index] === answer) {
       score++;
-      if (score === (easyQuestions.length - wrongAnswer)) {
+      if (score === easyQuestions.length - wrongAnswer) {
         console.log(
           chalk.bold.green(
             `🎉 Congratulation You have completed Level One of this game 
@@ -42,34 +65,39 @@ function playGame(questionType) {
         playGame(mediumQuestions);
 
         // levelTwo();
-      } else if (score === ((easyQuestions.length + mediumQuestions.length) - wrongAnswer)) {
+      } else if (
+        score ===
+        easyQuestions.length + mediumQuestions.length - wrongAnswer
+      ) {
         console.log(
           chalk.bold.green(
-            `🎉 Congratulation You have completed All Levels  of this game :
-            Your total Score summary :-
-            Correct Answer: ${score}
-            Wrong Answer : ${wrongAnswer}`
+            `\n 🎉 Congratulation You have completed All Levels  of this game :`
           )
         );
+        scoreSummary(score, wrongAnswer);
         return;
       } else {
-
         console.log(chalk.green("Correct Answer Move Ahead\n"));
-        // console.clear();
-
-
+        // console.clear()
       }
     } else {
       wrongAnswer++;
       if (wrongAnswer === 2) {
-        console.log(chalk.red("Wrong Answer , Better luck next time till then , Practice more JS questions"))
-        console.log(chalk.bold.green(`Total Score : ${score - wrongAnswer}`));
+        console.log(
+          chalk.red(
+            "\n Wrong Answer , Better luck next time till then , Practice more JS questions"
+          )
+        );
+        console.log(`The correct answer is ${chalk.green(answer)}\n`);
+        scoreSummary(score, wrongAnswer);
         return;
       }
-      console.log(chalk.red("Wrong Answer ,Play carefully ,No lifeline remaining now \n"));
+      console.log(
+        chalk.red("Wrong Answer ,Play carefully ,No lifeline remaining now")
+      );
+      console.log(`The correct answer is ${chalk.green(answer)}\n`);
     }
   }
-
 }
 /*
 const levelOne = () => {
